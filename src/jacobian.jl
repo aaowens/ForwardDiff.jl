@@ -70,7 +70,7 @@ function extract_jacobian!(out::AbstractArray, ydual::AbstractArray, n)
     for col in 1:size(out_reshaped, 2), row in 1:size(out_reshaped, 1)
         out_reshaped[row, col] = partials(ydual[row], col)
     end
-    return out_reshaped 
+    return out 
 end
 
 function extract_jacobian!(out::DiffResult, ydual::AbstractArray, n)
