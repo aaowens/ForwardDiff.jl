@@ -24,6 +24,9 @@ end
     T = typeof(Tag(F, R))
     ydual = f(Dual{T}(x, one(x)))
     out = extract_value!(out, ydual)
+    if typeof(out) == Void 
+    @show out x ydual 
+    end 
     out = extract_derivative!(out, ydual)
     return out
 end
