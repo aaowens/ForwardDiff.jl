@@ -37,7 +37,8 @@ hessian!(out, f::F, x::SArray) where {F} = jacobian!(out, y -> gradient(f, y), x
 hessian!(out::DiffResult, f::F, x::SArray) where {F} = hessian!(out, f, x, HessianConfig(f, out, x))
 
 function hessian!(result::ImmutableDiffResult, f::F, x::SArray) where {F} 
-    _out = jacobian!(result, y -> gradient(f, y), x)
+    _result = DiffBase.DiffResult(DiffBase.gradient(result), DiffBase.hessian(result))
+    _out = jacobian!(_result, y -> gradient(f, y), x)
     val = f(x)
     result = DiffBase.DiffResult(val, DiffBase.value(_out), DiffBase.jacobian(_out))
 end
