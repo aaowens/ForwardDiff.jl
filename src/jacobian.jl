@@ -70,11 +70,12 @@ function extract_jacobian!(out::AbstractArray, ydual::AbstractArray, n)
     for col in 1:size(out_reshaped, 2), row in 1:size(out_reshaped, 1)
         out_reshaped[row, col] = partials(ydual[row], col)
     end
-    return out
+    return out_reshaped 
 end
 
 function extract_jacobian!(out::DiffResult, ydual::AbstractArray, n)
-    extract_jacobian!(DiffBase.jacobian(out), ydual, n)
+    jout = extract_jacobian!(DiffBase.jacobian(out), ydual, n)
+    out = DiffBase.jacobian!(out, jout)
     return out
 end
 
