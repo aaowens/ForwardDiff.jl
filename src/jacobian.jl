@@ -72,7 +72,6 @@ function extract_jacobian!(out::AbstractArray, ydual::AbstractArray, n)
     end
     return out 
 end
-extract_jacobian!(out::SArray, ydual::SArray, n) = extract_jacobian(ydual, x)
 
 function extract_jacobian!(out::DiffResult, ydual::AbstractArray, n)
     jout = extract_jacobian!(DiffBase.jacobian(out), ydual, n)
@@ -136,7 +135,8 @@ end
 
 @inline function vector_mode_jacobian!(out, f::F, x::SArray{S,V,D,N}) where {F,S,V,D,N}
     ydual = vector_mode_dual_eval(f, x)
-    out = extract_jacobian!(out, ydual, N)
+    jout = extract_jacobian(ydual, x)
+    out = DiffBase.jacobian!(out, jout)
     out = extract_value!(out, ydual)
     return out
 end
