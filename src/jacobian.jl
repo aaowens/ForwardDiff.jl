@@ -72,6 +72,7 @@ function extract_jacobian!(out::AbstractArray, ydual::AbstractArray, n)
     end
     return out 
 end
+extract_jacobian!(out::SArray, ydual::SArray, n) = extract_jacobian(ydual, x)
 
 function extract_jacobian!(out::DiffResult, ydual::AbstractArray, n)
     jout = extract_jacobian!(DiffBase.jacobian(out), ydual, n)
