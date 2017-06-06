@@ -144,6 +144,13 @@ end
 
 @inline function vector_mode_jacobian!(out, f::F, x::SArray{S,V,D,N}) where {F,S,V,D,N}
     ydual = vector_mode_dual_eval(f, x)
+    out = extract_jacobian!(out, ydual, N)
+    out = extract_value!(out, ydual)
+    return out
+end
+
+@inline function vector_mode_jacobian!(out::ImmutableDiffResult, f::F, x::SArray{S,V,D,N}) where {F,S,V,D,N}
+    ydual = vector_mode_dual_eval(f, x)
     jout = extract_jacobian(ydual, x)
     vout = extract_value(ydual, x)
     out = DiffBase.jacobian!(out, jout)
